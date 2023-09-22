@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -63,11 +64,32 @@ const CreatePage = () => {
                     <Input
                       disabled={isSubmitting}
                       placeholder="e.g. 'Advenced web development'"
+                      {...field}
+                      /* {...field} === onChange: (...event: any[]) => void;
+                      onBlur: Noop;
+                      disabled?: boolean;
+                      value: FieldPathValue<TFieldValues, TName>;
+                      name: TName;
+                       ref: RefCallBack;*/
                     />
                   </FormControl>
+                  <FormDescription>
+                    What will you teach in this course?
+                  </FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="flex items-center gap-x-2">
+              <Link href="/">
+                <Button type="button" variant="ghost">
+                  Cancel
+                </Button>
+              </Link>
+              <Button type="submit" disabled={!isValid || isSubmitting}>
+                Continue
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

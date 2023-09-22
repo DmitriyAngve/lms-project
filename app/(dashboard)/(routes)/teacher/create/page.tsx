@@ -2,9 +2,11 @@
 
 import * as z from "zod";
 import axios from "axios";
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import {
   Form,
@@ -17,28 +19,40 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 
+// схема, которая опеределяет, какие данные ожидаются в моей форме. В данном случае есть одно поле "title", которое должно быть строкой с длиной не менее 1 символа. Если условие не выполняется, то выведется ошибка
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required",
   }),
-}); // схема, которая опеределяет, какие данные ожидаются в моей форме. В данном случае есть одно поле "title", которое должно быть строкой с длиной не менее 1 символа. Если условие не выполняется, то выведется ошибка
+});
 
 const CreatePage = () => {
+  const router = useRouter();
+
+  // здесь создается форма с использованием хука useForm, форма соответствует схеме данных из "forcmSchema"
   const form = useForm<z.infer<typeof formSchema>>({
-    // здесь создается форма с использованием хука useForm, форма соответствует схеме данных из "forcmSchema"
-    resolver: zodResolver(formSchema), // указываю резольвер формы для интеграции Zod в мою форму. Это гарантия, что данные будут соот-ть схеме "formSchema"
+    // указываю резольвер формы для интеграции Zod в мою форму. Это гарантия, что данные будут соот-ть схеме "formSchema"
+    resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
     },
-  }); //
+  });
 
-  const { isSubmitting, isValid } = form.formState; // деструктурирую состояние формы для получения информации о том, отправляется ли формы (isSubmitting) и прошла ли валидация (isValid)
+  // деструктурирую состояние формы для получения информации о том, отправляется ли формы (isSubmitting) и прошла ли валидация (isValid)
+  const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  }; // ф-ия, которая будет вызываться при отправке формы. Она принимает значения, соот-ие схеме "formSchema"
+  // ф-ия, которая будет вызываться при отправке формы. Она принимает значения, соот-ие схеме "formSchema"
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      // если выбираем курс, то редирект на него с помощью router
+      const response = await axios.post("/api/course", values);
+
+      router.push(`$/teacher/courses/${response.data.id}`);
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">

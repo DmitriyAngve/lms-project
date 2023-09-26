@@ -26,3 +26,34 @@ const backgroundVariants = cva(
     },
   }
 );
+
+const iconVariants = cva("", {
+  variants: {
+    variant: {
+      default: "text-sky-700",
+      success: "text-emerald-700",
+    },
+    size: {
+      default: "h-8 w-8",
+      sm: "h-4 w-4",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
+
+type backgroundVariantsProps = VariantProps<typeof backgroundVariants>;
+type iconVariantsProps = VariantProps<typeof iconVariants>;
+
+interface IconBadgeProps extends backgroundVariantsProps, iconVariantsProps {
+  icon: LucideIcon;
+} // расширяем "IconBadgeProps".
+// "extends" - ключевое слово, указывает на то, что интерфейс "IconBadgeProps" наследует свойства двух других интерфейсов.
+
+export const IconBadge = ({ icon: Icon, variant, size }: IconBadgeProps) => {
+  <div className={cn(backgroundVariants({ variant, size }))}>
+    <Icon className={cn(iconVariants({ variant, size }))} />
+  </div>;
+};

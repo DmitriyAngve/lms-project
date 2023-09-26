@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 import { Pencil } from "lucide-react";
+import toast from "react-hot-toast";
 
 import {
   Form,
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface TitleFormProps {
   initialData: {
@@ -36,6 +38,8 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
 
   const toggleEdit = () => setIsEditing((current) => !current); // это функция обновления состояния setIsEditing (когда вызывается эта функция, это приводит к изменению isEditing с true на false и наоборот)
 
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
@@ -44,7 +48,14 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.patch(`/api/courses/${courseId}`, values);
+      toast.success("Course updated");
+      toggleEdit();
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -82,9 +93,15 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="flex items-center gap-x-2">
+              <Button disabled={!isValid || isSubmitting} type="submit">
+                Save
+              </Button>
+            </div>
           </form>
         </Form>
       )}

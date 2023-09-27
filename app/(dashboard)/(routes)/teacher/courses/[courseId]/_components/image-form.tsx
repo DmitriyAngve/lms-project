@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-import { Pencil } from "lucide-react";
+import { Pencil, PlusCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 import {
@@ -23,18 +23,18 @@ import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
 
-interface DescriptionFormProps {
+interface ImageFormProps {
   initialData: Course;
   courseId: string;
 }
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "Description is required",
+  imageUrl: z.string().min(1, {
+    message: "Image is required",
   }),
 });
 
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current); // это функция обновления состояния setIsEditing (когда вызывается эта функция, это приводит к изменению isEditing с true на false и наоборот)
@@ -44,7 +44,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || "",
+      imageUrl: initialData?.imageUrl || "",
     },
   });
 
@@ -64,15 +64,20 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Course image
         <Button onClick={toggleEdit} variant="ghost">
           {/* указываю Cancel во фрагменте потому что это условный рендеринг. Если isEditing = false, то Cancel не рендерится! */}
-          {isEditing ? (
-            <>Cancel</>
-          ) : (
+          {isEditing && <>Cancel</>}
+          {!isEditing && !initialData.imageUrl && (
+            <>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add an image
+            </>
+          )}
+          {!isEditing && initialData.imageUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit description
+              Edit image
             </>
           )}
         </Button>
@@ -121,4 +126,4 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   );
 };
 
-export default DescriptionForm;
+export default ImageForm;

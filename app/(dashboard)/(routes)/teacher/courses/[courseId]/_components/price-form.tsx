@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 import { Course } from "@prisma/client";
+import { formatPrice } from "@/lib/format";
 
 interface PriceFormProps {
   initialData: Course;
@@ -82,7 +83,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
             !initialData.price && "text-slate-500 italic"
           )}
         >
-          {initialData.price || "No price"}
+          {initialData.price ? formatPrice(initialData.price) : "No price"}
         </p>
       )}
       {isEditing && (

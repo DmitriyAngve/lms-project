@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { PlusCircle } from "lucide-react";
+import { ChaptersList } from "./chapters-list";
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
   courseId: string;
@@ -112,7 +113,11 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
           // !initialData.chapters.length - если длина равна 0
         >
           {!initialData.chapters.length && "No chapters"}
-          {/* TODO: Add a list of chapters */}
+          <ChaptersList
+            onEdit={() => {}}
+            onReorder={() => {}}
+            items={initialData.chapters || []}
+          />
         </div>
       )}
       {!isCreating && (

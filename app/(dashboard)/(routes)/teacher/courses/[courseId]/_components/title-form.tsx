@@ -33,7 +33,7 @@ const formSchema = z.object({
   }),
 });
 
-const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
+export const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current); // это функция обновления состояния setIsEditing (когда вызывается эта функция, это приводит к изменению isEditing с true на false и наоборот)
@@ -109,4 +109,4 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   );
 };
 
-export default TitleForm;
+// export default TitleForm;

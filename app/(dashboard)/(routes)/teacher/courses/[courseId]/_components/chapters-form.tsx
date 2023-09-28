@@ -20,30 +20,31 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-
+import { Textarea } from "@/components/ui/textarea";
 import { Course } from "@prisma/client";
-import { formatPrice } from "@/lib/format";
 
-interface PriceFormProps {
+interface ChaptersFormProps {
   initialData: Course;
   courseId: string;
 }
 
 const formSchema = z.object({
-  price: z.coerce.number(), // "coerce" это метод, который позволяет преобразовать значение в соответствующий тип поля "price" и использует метод "coerce.number()" // Иными словами, преобазовывает в число
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
 });
 
-export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
+export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const toggleEdit = () => setIsEditing((current) => !current); // это функция обновления состояния setIsEditing (когда вызывается эта функция, это приводит к изменению isEditing с true на false и наоборот)
+  const toggleEdit = () => setIsEditing((current) => !current);
 
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: initialData?.price || undefined,
+      description: initialData?.description || "",
     },
   });
 
@@ -63,15 +64,14 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded p-4">
       <div className="font-medium flex items-center justify-between">
-        Course price
+        Course description
         <Button onClick={toggleEdit} variant="ghost">
-          {/* указываю Cancel во фрагменте потому что это условный рендеринг. Если isEditing = false, то Cancel не рендерится! */}
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit price
+              Edit description
             </>
           )}
         </Button>
@@ -80,10 +80,10 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
         <p
           className={cn(
             "text-sm mt-2",
-            !initialData.price && "text-slate-500 italic"
+            !initialData.description && "text-slate-500 italic"
           )}
         >
-          {initialData.price ? formatPrice(initialData.price) : "No price"}
+          {initialData.description || "No Description"}
         </p>
       )}
       {isEditing && (
@@ -94,15 +94,13 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
           >
             <FormField
               control={form.control}
-              name="price"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="0.01"
+                    <Textarea
                       disabled={isSubmitting}
-                      placeholder="Set a price for your course"
+                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
@@ -122,4 +120,4 @@ export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   );
 };
 
-// export default PriceForm;
+// export default ChaptersForm;

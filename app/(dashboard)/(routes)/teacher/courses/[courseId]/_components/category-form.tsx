@@ -34,7 +34,7 @@ const formSchema = z.object({
   categoryId: z.string().min(1),
 });
 
-const CategoryForm = ({
+export const CategoryForm = ({
   initialData,
   courseId,
   options,
@@ -126,4 +126,4 @@ const CategoryForm = ({
   );
 };
 
-export default CategoryForm;
+// export default CategoryForm;

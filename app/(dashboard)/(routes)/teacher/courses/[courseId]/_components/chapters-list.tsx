@@ -36,6 +36,32 @@ export const ChaptersList = ({
     setChapters(items);
   }, [items]);
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return; // проверяем, был ли перетащен элемент в новое местоположение, если нет - ф-ия завершается
+
+    const items = Array.from(chapters); // создается копия массива, чтобы можно было вносить изменения в порядок
+    const [reoderedItem] = items.splice(result.source.index, 1); // из массива "items" удаляется элемент, который был перемещен в "result.source.index"
+    items.splice(result.destination.index, 0, reoderedItem); // Затем этот элемент из строчки сверху вставляется обратно в массив "items" в позицию "result.destination.index", что позволяет изменить порядок элементов
+
+    // Ниже вычисляю начальный и конечный индексы измененных элементов. Эти индексы нужны для вычисления диапазона изменненных элементов
+    const startIndex = Math.min(result.source.index, result.destination.index);
+    const endIndex = Math.max(result.source.index, result.destination.index);
+
+    const updatedChapters = items.slice(startIndex, endIndex + 1);
+
+    // Обновленный массив "items" устанавливается с использованием "setChapters", что приводит к обновлению компонента с новым порядком элементов
+    setChapters(items);
+
+    // создается массив, который содержит объекты для обновления порядка элементов в БД. Каждый объект содержит "id" элемента и новую "position", которая опеределяется с помощью "items.findIndex"
+    const bulkUpdateData = updatedChapters.map((chapter) => ({
+      id: chapter.id,
+      position: items.findIndex((item) => item.id === chapter.id),
+    }));
+
+    // Функция "onReorder" вызывается с массивом "bulkUpdateData", чтобы обновить порядок элементов в БД
+    onReorder(bulkUpdateData);
+  };
+
   // не показывай ничего, если компонент не в стадии "Mounted". Предотвращает hydration issues
   if (!isMouted) {
     return null;
@@ -43,7 +69,7 @@ export const ChaptersList = ({
 
   return (
     // "DragDropContext" - обёртка. "onDragEnd={() => {}}" - ф-ия, которая будет завершаться после перетаскивания элементов
-    <DragDropContext onDragEnd={() => {}}>
+    <DragDropContext onDragEnd={onDragEnd}>
       {/* Droppable - компонент, определяющий область, в которой можно перетаскивать элементы. "droppableId" - уникальный идентификатор области */}
       <Droppable droppableId="chapters">
         {/* далее ф-ия рендер. Отвечает за отображание самих элементов списка. Стили зависят от "chapter.isPublished" */}

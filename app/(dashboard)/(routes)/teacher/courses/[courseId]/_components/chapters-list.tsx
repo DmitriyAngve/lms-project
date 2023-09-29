@@ -40,8 +40,8 @@ export const ChaptersList = ({
     if (!result.destination) return; // проверяем, был ли перетащен элемент в новое местоположение, если нет - ф-ия завершается
 
     const items = Array.from(chapters); // создается копия массива, чтобы можно было вносить изменения в порядок
-    const [reoderedItem] = items.splice(result.source.index, 1); // из массива "items" удаляется элемент, который был перемещен в "result.source.index"
-    items.splice(result.destination.index, 0, reoderedItem); // Затем этот элемент из строчки сверху вставляется обратно в массив "items" в позицию "result.destination.index", что позволяет изменить порядок элементов
+    const [reorderedItem] = items.splice(result.source.index, 1); // из массива "items" удаляется элемент, который был перемещен в "result.source.index"
+    items.splice(result.destination.index, 0, reorderedItem); // Затем этот элемент из строчки сверху вставляется обратно в массив "items" в позицию "result.destination.index", что позволяет изменить порядок элементов
 
     // Ниже вычисляю начальный и конечный индексы измененных элементов. Эти индексы нужны для вычисления диапазона изменненных элементов
     const startIndex = Math.min(result.source.index, result.destination.index);

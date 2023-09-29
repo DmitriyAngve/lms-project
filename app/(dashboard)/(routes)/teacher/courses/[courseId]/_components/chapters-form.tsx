@@ -61,6 +61,26 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     }
   };
 
+  const onReorder = async function (
+    updateData: { id: string; position: number }[]
+  ) {
+    try {
+      setIsUpdating(true);
+
+      // Запрос отправляется на эндпоинт "/api/courses/${courseId}/chapters/reorder" и в теле запроса передается объект с полем "list", который содержит данные "updateData". По факту, сервер ожидает данные о порядке глав в поле "list", чтобы выполнить необъодимые операции на сервере, такие как обновление "chapters" в БД
+      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        list: updateData,
+      });
+
+      toast.success("Chapters reordered");
+      router.refresh(); // Вызываю метод "refresh" объекта маршрутизатора "router". Вызывает обновление маршрута без перехода на другую страницу.
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <div className="mt-6 border bg-slate-100 rounded p-4">
       <div className="font-medium flex items-center justify-between">
@@ -115,7 +135,7 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
           {!initialData.chapters.length && "No chapters"}
           <ChaptersList
             onEdit={() => {}}
-            onReorder={() => {}}
+            onReorder={onReorder}
             items={initialData.chapters || []}
           />
         </div>

@@ -1,10 +1,16 @@
-import { IconBadge } from "@/components/icon-badge";
 import { db } from "@/lib/db";
+
 import { auth } from "@clerk/nextjs";
-import { ArrowLeft, LayoutDashboard } from "lucide-react";
+
 import Link from "next/link";
 import { redirect } from "next/navigation";
+
+import { IconBadge } from "@/components/icon-badge";
+
 import { ChapterTitleForm } from "./_components/chapter-title-form";
+import { ChapterDescriptionForm } from "./_components/chapter-description-form";
+
+import { ArrowLeft, LayoutDashboard } from "lucide-react";
 
 const ChapterIdPage = async ({
   params,
@@ -66,6 +72,11 @@ const ChapterIdPage = async ({
             <h2 className="text-xl">Customize your chapter</h2>
           </div>
           <ChapterTitleForm
+            initialData={chapter}
+            courseId={params.courseId}
+            chapterId={params.chapterId}
+          />
+          <ChapterDescriptionForm
             initialData={chapter}
             courseId={params.courseId}
             chapterId={params.chapterId}

@@ -16,4 +16,10 @@ export const Editor = ({ onChange, value }: EditorProps) => {
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   ); // импортирую реакт квилл без сервер сайд рендеринга (только на клиентской стороне) "use client" - не достаточно
+
+  return (
+    <div className="bg-white">
+      <ReactQuill theme="snow" value={value} onChange={onChange} />
+    </div>
+  );
 };

@@ -8,9 +8,9 @@ import { IconBadge } from "@/components/icon-badge";
 
 import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
-
-import { ArrowLeft, Eye, LayoutDashboard } from "lucide-react";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
+
+import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
 
 const ChapterIdPage = async ({
   params,
@@ -93,6 +93,12 @@ const ChapterIdPage = async ({
               courseId={params.courseId}
               chapterId={params.chapterId}
             />
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-x-2">
+            <IconBadge icon={Video} />
+            <h2 className="text-xl">Add a video</h2>
           </div>
         </div>
       </div>

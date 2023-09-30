@@ -1,13 +1,20 @@
 "use client";
 
 import * as z from "zod";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+
+import { useRouter } from "next/navigation";
+
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import toast from "react-hot-toast";
+
+import { cn } from "@/lib/utils";
 
 import { Pencil } from "lucide-react";
-import toast from "react-hot-toast";
+
+import { Chapter } from "@prisma/client";
 
 import {
   Form,
@@ -16,13 +23,9 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-
-import { Chapter } from "@prisma/client";
 import { Editor } from "@/components/editor";
+import { Preview } from "@/components/preview";
 
 interface ChapterDescriptionFormProps {
   initialData: Chapter;
@@ -73,7 +76,6 @@ export const ChapterDescriptionForm = ({
       <div className="font-medium flex items-center justify-between">
         Chapter description
         <Button onClick={toggleEdit} variant="ghost">
-          {/* указываю Cancel во фрагменте потому что это условный рендеринг. Если isEditing = false, то Cancel не рендерится! */}
           {isEditing ? (
             <>Cancel</>
           ) : (
@@ -85,14 +87,17 @@ export const ChapterDescriptionForm = ({
         </Button>
       </div>
       {!isEditing && (
-        <p
+        <div
           className={cn(
             "text-sm mt-2",
             !initialData.description && "text-slate-500 italic"
           )}
         >
-          {initialData.description || "No Description"}
-        </p>
+          {!initialData.description && "No Description"}
+          {initialData.description && (
+            <Preview value={initialData.description} />
+          )}
+        </div>
       )}
       {isEditing && (
         <Form {...form}>

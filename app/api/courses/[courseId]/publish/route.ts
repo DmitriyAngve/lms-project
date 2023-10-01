@@ -1,8 +1,7 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
-import next from "next";
+
 import { NextResponse } from "next/server";
-import { use } from "react";
 
 export async function PATCH(
   req: Request,
@@ -47,7 +46,7 @@ export async function PATCH(
       return new NextResponse("Missing required fields", { status: 401 });
     }
 
-    const publishCourse = await db.course.update({
+    const publishedCourse = await db.course.update({
       where: {
         id: params.courseId,
         userId,
@@ -56,7 +55,7 @@ export async function PATCH(
         isPublished: true,
       },
     });
-    return NextResponse.json(publishCourse);
+    return NextResponse.json(publishedCourse);
   } catch (error) {
     console.log("[COURSE_ID_PUBLISH]", error);
     return new NextResponse("Internal Error", { status: 500 });

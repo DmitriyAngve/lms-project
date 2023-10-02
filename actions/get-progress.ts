@@ -17,6 +17,21 @@ export const getProgress = async (
     });
     // Затем создаю массив (publishedChapterIds), который получается путем извлечения "id" из каждой опубликованной главы
     const publishedChapterIds = publishedChapters.map((chapter) => chapter.id);
+
+    const validCompletedChapters = await db.userProgress.count({
+      where: {
+        userId: userId,
+        chapterId: {
+          in: publishedChapterIds,
+        },
+        isCompleted: true,
+      },
+    });
+
+    const progressPrecentage =
+      (validCompletedChapters / publishedChapterIds.length) * 100;
+
+    return progressPrecentage;
   } catch (error) {
     console.log("[GET_PROGRESS]", error);
     return 0;

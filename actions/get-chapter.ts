@@ -47,7 +47,7 @@ export const getChapter = async ({
 
     // default values
     let muxData = null;
-    let attachments: Attachment[];
+    let attachments: Attachment[] = [];
     let nextChapter: Chapter | null = null; // это означает, что в начале выполнения кода не тследующей главы
 
     // Только при наличие купленного курса пользователь получит доступ к attachments
@@ -79,6 +79,25 @@ export const getChapter = async ({
         },
       });
     }
+
+    const userProgress = await db.userProgress.findUnique({
+      where: {
+        userId_chapterId: {
+          userId,
+          chapterId,
+        },
+      },
+    });
+
+    return {
+      chapter,
+      course,
+      muxData,
+      attachments,
+      nextChapter,
+      userProgress,
+      purchase,
+    };
   } catch (error) {
     console.log("[GET_CHAPTER]", error);
     return {

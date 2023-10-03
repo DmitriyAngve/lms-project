@@ -111,8 +111,9 @@ model Purchase{
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt()
 
+  @@unique([userId, courseId])
   @@index([courseId]) // индекс (необходим для улучшенияпроизводительности при поиске и сортировке записей в таблице БД). В этом случае это обозначает, что в БД будет создан индекс дял ускорения и сортировки записей, используюзих поле "courseId"
 }
 

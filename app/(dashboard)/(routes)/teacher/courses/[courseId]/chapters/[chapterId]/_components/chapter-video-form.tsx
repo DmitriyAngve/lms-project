@@ -2,17 +2,13 @@
 
 import * as z from "zod";
 import axios from "axios";
-
 import MuxPlayer from "@mux/mux-player-react";
-
+import { Pencil, PlusCircle, Video } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-import { Chapter, MuxData } from "@prisma/client";
-
 import { useRouter } from "next/navigation";
-
-import { Pencil, PlusCircle, Video } from "lucide-react";
+import { Chapter, MuxData } from "@prisma/client";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
@@ -47,13 +43,13 @@ export const ChapterVideoForm = ({
       toast.success("Chapter updated");
       toggleEdit();
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded p-4">
+    <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Chapter video
         <Button onClick={toggleEdit} variant="ghost">
@@ -62,7 +58,7 @@ export const ChapterVideoForm = ({
           {!isEditing && !initialData.videoUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add a Video
+              Add a video
             </>
           )}
           {!isEditing && initialData.videoUrl && (
@@ -100,7 +96,7 @@ export const ChapterVideoForm = ({
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Video can take a few minutes to process. Refresh the page if video
+          Videos can take a few minutes to process. Refresh the page if video
           does not appear.
         </div>
       )}

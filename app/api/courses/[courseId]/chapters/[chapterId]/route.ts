@@ -1,7 +1,8 @@
-import { db } from "@/lib/db";
+import Mux from "@mux/mux-node";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import Mux from "@mux/mux-node";
+
+import { db } from "@/lib/db";
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -131,6 +132,7 @@ export async function PATCH(
       });
 
       // Если запись muxData найдена, то код выполняется:
+
       if (existingMuxData) {
         await Video.Assets.del(existingMuxData.assetId); // Это означает, что предыдущий видео-файл будет удален с Mux
         await db.muxData.delete({
@@ -148,6 +150,7 @@ export async function PATCH(
       });
 
       // Создаю новую запись в БД с информацией о видео-файле.
+
       await db.muxData.create({
         data: {
           chapterId: params.chapterId,

@@ -1,5 +1,4 @@
 import Stripe from "stripe";
-
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -23,13 +22,10 @@ export async function POST(req: Request) {
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
-
-  // извлекаю метаданные идентификаторов пользователя и курса (userId/courseId) из метаданных сессии оформления заказа (session?.metadata). "?" условный оператор обеспечивает безопасный доступ к данным, предотвращая ошибки, если сво-во отсутст-ет
   const userId = session?.metadata?.userId;
   const courseId = session?.metadata?.courseId;
 
   if (event.type === "checkout.session.completed") {
-    // если нет этих двух, то вебхук не завершиться
     if (!userId || !courseId) {
       return new NextResponse(`Webhook Error: Missing metadata`, {
         status: 400,

@@ -1,10 +1,8 @@
 import Stripe from "stripe";
+import { currentUser } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-
-import { currentUser } from "@clerk/nextjs";
-
-import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 
 export async function POST(
@@ -15,7 +13,7 @@ export async function POST(
     const user = await currentUser();
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
-      return new NextResponse("Unauthrorized", { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.findUnique({
@@ -34,15 +32,14 @@ export async function POST(
       },
     });
 
-    if (!purchase) {
-      return new NextResponse("Already purchased", { status: 404 });
+    if (purchase) {
+      return new NextResponse("Already purchased", { status: 400 });
     }
 
     if (!course) {
       return new NextResponse("Not found", { status: 404 });
     }
 
-    // Код для создания сессии платежа в Stripe, чтобы определить что именно пользователь покупает и по какой цене
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
       {
         quantity: 1,
@@ -50,9 +47,9 @@ export async function POST(
           currency: "USD",
           product_data: {
             name: course.title,
-            description: course.description!, // "!" для тайпскрипта (чтобы не ругался) - значит, что поле не обязательное
+            description: course.description!,
           },
-          unit_amount: Math.round(course.price! * 100), // "!" - тут означает, что цена не будет иметь значений null/undefined (чтобы избежать проверок)
+          unit_amount: Math.round(course.price! * 100),
         },
       },
     ];
@@ -79,17 +76,16 @@ export async function POST(
       });
     }
 
-    // создание новой сессии оформления заказа в Stripe.
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomer.stripeCustomerId,
-      line_items, // это массив товаров
+      line_items,
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${course.id}?success=1`, // для перенаплавления
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${course.id}?canceled=1`, // для перенаплавления
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${course.id}?success=1`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${course.id}?canceled=1`,
       metadata: {
         courseId: course.id,
         userId: user.id,
-      }, // метаданные используются для отслеживания и связывания заказов с конкретными пользователями и курсами (для Webhook)
+      },
     });
 
     return NextResponse.json({ url: session.url });

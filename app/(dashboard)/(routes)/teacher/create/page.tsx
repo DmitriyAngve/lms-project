@@ -77,7 +77,7 @@ const CreatePage = () => {
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Advenced web development'"
+                      placeholder="e.g. 'Advanced web development'"
                       {...field}
                       /* {...field} === onChange: (...event: any[]) => void;
                       onBlur: Noop;

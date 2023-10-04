@@ -89,7 +89,7 @@ export async function POST(
       metadata: {
         courseId: course.id,
         userId: user.id,
-      }, // метаданные используются для отслеживания и связывания заказов с конкретными пользователями и курсами
+      }, // метаданные используются для отслеживания и связывания заказов с конкретными пользователями и курсами (для Webhook)
     });
 
     return NextResponse.json({ url: session.url });

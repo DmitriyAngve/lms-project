@@ -65,7 +65,6 @@ export async function PATCH(
     const { userId } = auth();
     const { courseId } = params; // извлекаем courseId из параметров запроса
     const values = await req.json(); // получаем данные из тела HTTP-запроса и разбираем JSON-данные
-
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

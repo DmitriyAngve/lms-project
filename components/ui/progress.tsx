@@ -15,10 +15,15 @@ const progressVariants = cva("h-full w-full flex-1 bg-primary transition-all", {
   },
 });
 
+// код, определяет сразу два интерфейса.
+// "export interface ProgressProps" расширяет другие типы и интерфейсы, чтобы редоставить свойства для компонента "Progress"
+// "React.HTMLAttributes<HTMLDivElement>" - Это фрагмент интерфейса "ProgressProps" включает св-ва, которые могут исполь-ся для настройки HTML-элемента "div". Эти св-ва всключают в себя "className" и др.
+// "VariantProps<typeof progressVariants>" - это фрагмент предполагает наличие сво-в, связанных с "variants" компонента "Progress"
+// В целом "CombinedProgressProps" объединяет все свойства, необходимые для корректного исполь-я компонента "Progress", включая атрибуты HTML-элемента div, сво-ва связанные с вариантами стилей и другие св-ва, определенные в "ProgressPrimitive.Root". Все это позволяет передавать все необходимые св-ва в компонент "Progress"
 export interface ProgressProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof progressVariants> {}
-
+// "ProgressPrimitive.Root" - это корневой элемент компонента "Progress" и его св-ва пропсы могут включать в себя атрибуты "div".
 type CombinedProgressProps = ProgressProps &
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>;
 

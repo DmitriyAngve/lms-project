@@ -1,6 +1,7 @@
-import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+
+import { db } from "@/lib/db";
 
 export async function PUT(
   req: Request,
@@ -13,8 +14,8 @@ export async function PUT(
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
     // "upsert()" - это метод взаимодействия с БД, который обновляет запись в БД, если она существует, и создает новую запись, если её нет. Это сокращение от "update" и "insert"
+
     const userProgress = await db.userProgress.upsert({
       where: {
         userId_chapterId: {

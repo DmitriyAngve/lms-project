@@ -9,7 +9,6 @@ interface EditorProps {
   onChange: (value: string) => void;
   value: string;
 }
-
 export const Editor = ({ onChange, value }: EditorProps) => {
   // useMemo() используется для мемоизации (кэширования) вычислений. Позволяет оптимизировать производительность компонента, сохраняя результаты вычислений между рендерами
   const ReactQuill = useMemo(

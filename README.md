@@ -1,34 +1,116 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# LMS (learning management system) project
 
-First, run the development server:
+This is a repository for Build an LMS Platform: Next.js 13,  React, Stripe, Mux, Prisma, Tailwind, MySQL.
+
+## Technologies Used
+- **Next.js 13**: The foundation of the project, providing server-side rendering and routing.
+- **React**: Used for building the user interface and managing the state of the application.
+- **App Router**: Handling routing and navigation within the application.
+- **TypeScript**: Improving code quality and productivity with static typing.
+- **Clerk**: Authentication and user management for enhanced security.
+- **Prisma**: Secure and efficient database operations with a type-safe query language.
+- **Stripe**: Handling secure online transactions and payments.
+- **TailwindCSS**:  A utility-first CSS framework for simplified and consistent styling.
+- **ShadcnUI**: Reusable UI component library for visual consistency.
+- **MySQL**: Storing and managing data in a relational database.
+- **UploadThing**: Used for sending attachments as messages.
+- **Mux**: Providing video hosting, streaming, and transcoding services.
+- **Webhook**: Integrating external services and automating notifications and actions.
+
+  [Explore the Live Demo](https://lms-project-kohl.vercel.app/)
+
+Key Features:
+
+- Browse & Filter Courses
+- Purchase Courses using Stripe
+- Mark Chapters as Completed or Uncompleted
+- Progress Calculation of each Course
+- Student Dashboard
+- Teacher mode
+- Create new Courses
+- Create new Chapters
+- Easily reorder chapter position with drag n’ drop
+- Upload thumbnails, attachments and videos using UploadThing
+- Video processing using Mux
+- HLS Video player using Mux
+- Rich text editor for chapter description
+- Authentication using Clerk
+- ORM using Prisma
+- MySQL database using Planetscale
+
+### Prerequisites
+
+**Node version 18.x.x**
+
+## Installation and Usage
+
+To get started with this project, follow these steps:
+### 1. Cloning the repository
+
+```bash
+git clone https://github.com/DmitriyAngve/lms-project.git
+```
+
+### 2. Install the required dependencies using
+
+```bash
+npm i
+```
+
+### 3. Setup .env file
+
+
+```js
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=
+
+DATABASE_URL=
+
+UPLOADTHING_SECRET=
+UPLOADTHING_APP_ID=
+
+MUX_TOKEN_ID=
+MUX_TOKEN_SECRET=
+
+STRIPE_API_KEY=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+STRIPE_WEBHOOK_SECRET=
+
+NEXT_PUBLIC_TEACHER_ID=
+```
+
+### 4. Setup Prisma
+
+Add MySQL Database
+
+```bash
+npx prisma generate
+npx prisma db push
+
+```
+
+### 5. Start the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 6. Open your browser and navigate to
+```bash
+http://localhost:3000
+```
+to access the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 7. Available commands
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Running commands with npm `npm run [command]`
 
-## Learn More
+| command         | description                              |
+| :-------------- | :--------------------------------------- |
+| `dev`           | Starts a development instance of the app |
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

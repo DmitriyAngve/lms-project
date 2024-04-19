@@ -16,7 +16,7 @@ This is a repository for Build an LMS Platform: Next.js 13,  React, Stripe, Mux,
 - **MySQL**: Storing and managing data in a relational database.
 - **UploadThing**: Used for sending attachments as messages.
 - **Mux**: Providing video hosting, streaming, and transcoding services.
-- **Webhook**: Integrating external services and automating notifications and actions.
+- **Webhooks**: Integrating external services and automating notifications and actions.
 
   [Explore the Live Demo](https://lms-project-kohl.vercel.app/)
 
